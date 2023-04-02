@@ -1,0 +1,41 @@
+﻿@model EntityLayer.Concrete.Advice
+@{
+    ViewData["Title"] = "AddAdvice";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>title1</title>
+
+
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap.rtl.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+
+</head>
+<body>
+    <h1>Randevu Oluşturma Sayfası</h1>
+
+    @using (Html.BeginForm("AddAdvice", "Member", FormMethod.Post))
+    {
+        @Html.Label("Başlık Giriniz")
+        @Html.TextBoxFor(x => x.Title, new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.Title, "", new { @class = "text-success" })
+        <br />
+        <br />
+        @Html.Label("İçerik Giriniz")
+        @Html.TextBoxFor(x => x.Text, new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.Text, "", new { @class = "text-success" })
+        <br />
+        <br />
+        <button class="btn btn-outline-success">Kaydet</button>
+    }
+</body>
+</html>
+

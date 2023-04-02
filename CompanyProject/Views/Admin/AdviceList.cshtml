@@ -1,0 +1,41 @@
+﻿@using EntityLayer.Concrete
+@model List<Advice>
+@{
+    ViewData["Title"] = "AdviceList";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+
+</head>
+<body>
+    <main>
+        <table class="table table-bordered">
+            <tr>
+                <th>Id</th>
+                <th>Başlık</th>
+                <th>İçerik</th>
+                <th>Tarih</th>
+                <th>Sil</th>
+            </tr>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.AdviceId</td>
+                    <td>@item.Title</td>
+                    <td>@item.Text</td>
+                    <td>@item.AdviceDate</td>
+                    <td><a href="/Member/TakeAppointment/" class="btn btn-warning">Sil</a></td>
+                </tr>
+            }
+        </table>
+
+    </main>
+</body>
+</html>
+
