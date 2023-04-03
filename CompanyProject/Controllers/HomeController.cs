@@ -173,6 +173,8 @@ namespace CompanyProject.Controllers
 
 
 
+
+
         public IActionResult Privacy()
         {
             return View();
