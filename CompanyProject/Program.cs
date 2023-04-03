@@ -5,6 +5,7 @@ using BusinessLayer.ValidationRules;
 using DataAccessLayer.Concrete;
 using EntityLayer.Concrete;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -15,6 +16,12 @@ builder.Services.AddControllersWithViews().AddFluentValidation(x => x.RegisterVa
 
 //Database
 builder.Services.AddDbContext<AppDbContext>();
+
+//ForgetPasswordToken
+builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
+{
+    options.TokenLifespan = TimeSpan.FromHours(2);
+});
 
 //AddIdentity
 builder.Services.AddIdentity<AppUser, AppRole>(options =>
@@ -34,7 +41,9 @@ builder.Services.AddIdentity<AppUser, AppRole>(options =>
     options.Lockout.MaxFailedAccessAttempts = 3;
 
 
-}).AddEntityFrameworkStores<AppDbContext>();
+})
+.AddEntityFrameworkStores<AppDbContext>()
+.AddDefaultTokenProviders();
 
 //appsettings configuration
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
@@ -53,6 +62,8 @@ builder.Services.ConfigureApplicationCookie(opt =>
     opt.ExpireTimeSpan = TimeSpan.FromDays(60);
     opt.SlidingExpiration = true;
 });
+
+
 
 var app = builder.Build();
 
