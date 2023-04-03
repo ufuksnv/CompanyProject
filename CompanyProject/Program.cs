@@ -1,3 +1,6 @@
+using BusinessLayer.Abstract;
+using BusinessLayer.Concrete;
+using BusinessLayer.OptionsModels;
 using BusinessLayer.ValidationRules;
 using DataAccessLayer.Concrete;
 using EntityLayer.Concrete;
@@ -33,6 +36,23 @@ builder.Services.AddIdentity<AppUser, AppRole>(options =>
 
 }).AddEntityFrameworkStores<AppDbContext>();
 
+//appsettings configuration
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+//Scoped
+builder.Services.AddScoped<IEmailService, EmailService>();
+
+//CookieSettings
+builder.Services.ConfigureApplicationCookie(opt =>
+{
+    var cookieBuilder = new CookieBuilder();
+
+    cookieBuilder.Name = "CompanyAppCookie";
+    opt.LoginPath = new PathString("/Home/SignIn");
+    opt.AccessDeniedPath = new PathString("/Member/AccessDenied");
+    opt.Cookie = cookieBuilder;
+    opt.ExpireTimeSpan = TimeSpan.FromDays(60);
+    opt.SlidingExpiration = true;
+});
 
 var app = builder.Build();
 
