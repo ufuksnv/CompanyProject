@@ -1,4 +1,5 @@
-﻿using CompanyProject.Models;
+﻿using BusinessLayer.Abstract;
+using CompanyProject.Models;
 using CompanyProject.ViewModels;
 using EntityLayer.Concrete;
 using Microsoft.AspNetCore.Identity;
@@ -12,12 +13,15 @@ namespace CompanyProject.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly IEmailService _emailService;
 
-        public HomeController(ILogger<HomeController> logger, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+
+        public HomeController(ILogger<HomeController> logger, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IEmailService emailService)
         {
             _logger = logger;
             _userManager = userManager;
-            _signInManager = signInManager;           
+            _signInManager = signInManager;
+            _emailService = emailService;
         }
 
 
@@ -97,8 +101,34 @@ namespace CompanyProject.Controllers
 
         }
 
+        [HttpGet]
+        public IActionResult ForgetPassword()
+        {
+            return View();
+        }
 
+        [HttpPost]
+        public async Task<IActionResult> ForgetPassword(ForgetPasswordViewModel request)
+        {
+            var hasUser = await _userManager.FindByEmailAsync(request.Email);
 
+            if (hasUser == null)
+            {
+                TempData["ForgetErrorMessage"] = "Bu email adresine sahip kullanıcı bulunamadı.";
+                return View();
+            }
+
+            string passwordResetToken = await _userManager.GeneratePasswordResetTokenAsync(hasUser);
+
+            var passwordResetLink = Url.Action("ResetPassword", "Home", new
+            { userId = hasUser.Id, Token = passwordResetToken }, HttpContext.Request.Scheme);
+
+            //
+            await _emailService.SendResetPasswordEmail(passwordResetLink, hasUser.Email);
+
+            TempData["success"] = "Şifre yenileme linki, eposta adresinize gönderilmiştir.";
+            return RedirectToAction(nameof(ForgetPassword));
+        }
 
 
         public IActionResult Privacy()
