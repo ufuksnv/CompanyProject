@@ -8,12 +8,13 @@ using System.Threading.Tasks;
 
 namespace BusinessLayer.ValidationRules
 {
-    public class AdviceValidator : AbstractValidator<Advice>
+    public class TodoValidator : AbstractValidator<ToDo>
     {
-        public AdviceValidator()
+        public TodoValidator()
         {
             RuleFor(x => x.Title).NotEmpty().WithMessage("Lütfen Başlığı Boş Bırakmayınız!");
             RuleFor(x => x.Text).NotEmpty().WithMessage("Lütfen İçeriği Boş Bırakmayınız!");
         }
+
     }
 }

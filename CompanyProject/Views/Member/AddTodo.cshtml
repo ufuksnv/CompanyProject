@@ -1,6 +1,6 @@
-﻿@model EntityLayer.Concrete.Advice
+﻿@model EntityLayer.Concrete.ToDo
 @{
-    ViewData["Title"] = "AddAdvice";
+    ViewData["Title"] = "AddTodo";
 }
 
 <!DOCTYPE html>
@@ -22,7 +22,7 @@
 <body>
     <h1>Tavsiye Oluşturma Sayfası</h1>
 
-    @using (Html.BeginForm("AddAdvice", "Member", FormMethod.Post))
+    @using (Html.BeginForm("AddTodo", "Member", FormMethod.Post))
     {
         @Html.Label("Başlık Giriniz")
         @Html.TextBoxFor(x => x.Title, new { @class = "form-control" })
@@ -30,6 +30,11 @@
         <br />
         <br />
         @Html.Label("İçerik Giriniz")
+        @Html.TextBoxFor(x => x.Text, new { @class = "form-control" })
+        @Html.ValidationMessageFor(x => x.Text, "", new { @class = "text-success" })
+        <br />
+        <br />
+        @Html.Label("Hedef Tarihi Giriniz")
         @Html.TextBoxFor(x => x.Text, new { @class = "form-control" })
         @Html.ValidationMessageFor(x => x.Text, "", new { @class = "text-success" })
         <br />
