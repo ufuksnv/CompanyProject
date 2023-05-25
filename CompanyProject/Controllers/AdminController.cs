@@ -19,6 +19,19 @@ namespace CompanyProject.Controllers
             return View(request);
         }
 
-        
+        public IActionResult DeleteAdvice(int id)
+        {
+            var values = _adviceManager.TGetByID(id);
+
+            if (values == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                _adviceManager.TDelete(values);
+                return View();
+            }
+        }
     }
 }
