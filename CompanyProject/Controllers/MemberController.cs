@@ -1,27 +1,45 @@
 ﻿using BusinessLayer.Concrete;
 using BusinessLayer.ValidationRules;
+using CompanyProject.ViewModels;
 using DataAccessLayer.EntityFramework;
 using EntityLayer.Concrete;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CompanyProject.Controllers
 {
     public class MemberController : Controller
     {
+        private readonly SignInManager<AppUser> _signInManager;
+        private readonly UserManager<AppUser> _userManager;
         AdviceManager _adviceManager = new AdviceManager(new EfAdviceDal());
         ToDoManager _todoManager = new ToDoManager(new EfToDoDal());
 
-
-        //anasayfaya kişisel bilgi eklenecek, todolar silinebilecek(bitti),
-        //admin tarafında öneriler silinecek(bitti), facebook ile giriş olabilir.
-        //todo list yapılacak(bitti)
-        public IActionResult Index()
+        public MemberController(SignInManager<AppUser> signInManager, UserManager<AppUser> userManager)
         {
-            return View();
+            _signInManager = signInManager;
+            _userManager = userManager;
         }
 
+
+        //anasayfaya kişisel bilgi eklenecek(bitti), todolar silinebilecek(bitti),
+        //admin tarafında öneriler silinecek(bitti), facebook ile giriş olabilir.
+        //todo list yapılacak(bitti)(renk ayarlaması yapılabilir)
+        // kişisel bilgileri güncelleme eklenebilir.
+        public async Task<IActionResult> Index()
+        {
+            var currentUser = await _userManager.FindByNameAsync(User.Identity!.Name);
+            var userViewModel = new UserViewModel
+            {
+                Email = currentUser.Email,
+                UserName = currentUser.UserName,
+                PhoneNumber = currentUser.PhoneNumber,
+            };
+
+            return View(userViewModel);
+        }
 
         [HttpGet]
         public IActionResult AddAdvice()
