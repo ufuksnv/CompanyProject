@@ -14,8 +14,9 @@ namespace CompanyProject.Controllers
         ToDoManager _todoManager = new ToDoManager(new EfToDoDal());
 
 
-         
-
+        //anasayfaya kişisel bilgi eklenecek, todolar silinebilecek(bitti),
+        //admin tarafında öneriler silinecek, facebook ile giriş olabilir.
+        //todo list yapılacak
         public IActionResult Index()
         {
             return View();
@@ -77,6 +78,22 @@ namespace CompanyProject.Controllers
                 }
             }
             return View();
+        }
+
+        public IActionResult DeleteTodo(int id)
+        {
+            var values = _todoManager.TGetByID(id);
+            
+            if (values == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+               // _todoManager.TDelete(values);
+                values.Status = false;
+                return View();
+            }
         }
 
     }

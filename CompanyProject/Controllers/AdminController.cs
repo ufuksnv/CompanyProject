@@ -18,5 +18,7 @@ namespace CompanyProject.Controllers
             var request = _adviceManager.TGetList();
             return View(request);
         }
+
+        
     }
 }
