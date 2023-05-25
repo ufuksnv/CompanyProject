@@ -1,7 +1,7 @@
 ﻿@using EntityLayer.Concrete
-@model List<Advice>
+@model List<ToDo>
 @{
-    ViewData["Title"] = "AdviceList";
+    ViewData["Title"] = "TodoList";
 }
 
 <!DOCTYPE html>
@@ -20,17 +20,19 @@
                 <th>Id</th>
                 <th>Başlık</th>
                 <th>İçerik</th>
-                <th>Tarih</th>
+                <th>Oluşturma Tarihi</th>
+                <th>Hedef Tarihi</th>
                 <th>Sil</th>
             </tr>
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@item.AdviceId</td>
+                    <td>@item.ToDoId</td>
                     <td>@item.Title</td>
                     <td>@item.Text</td>
-                    <td>@item.AdviceDate</td>
-                    <td><a href="/Admin/DeleteAdvice/" class="btn btn-warning">Sil</a></td>
+                    <td>@item.TodoAddDate</td>
+                    <td>@item.TargetDate</td>
+                    <td><a href="/Member/DeleteTodo/" class="btn btn-warning">Sil</a></td>
                 </tr>
             }
         </table>

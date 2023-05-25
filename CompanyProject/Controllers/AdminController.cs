@@ -15,7 +15,7 @@ namespace CompanyProject.Controllers
 
         public IActionResult AdviceList()
         {
-            var request = _adviceManager.TGetList();
+            var request = _adviceManager.TGetList();            
             return View(request);
         }
 

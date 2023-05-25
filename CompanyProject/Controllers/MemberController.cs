@@ -15,8 +15,8 @@ namespace CompanyProject.Controllers
 
 
         //anasayfaya kişisel bilgi eklenecek, todolar silinebilecek(bitti),
-        //admin tarafında öneriler silinecek, facebook ile giriş olabilir.
-        //todo list yapılacak
+        //admin tarafında öneriler silinecek(bitti), facebook ile giriş olabilir.
+        //todo list yapılacak(bitti)
         public IActionResult Index()
         {
             return View();
@@ -78,6 +78,12 @@ namespace CompanyProject.Controllers
                 }
             }
             return View();
+        }
+
+        public IActionResult TodoList()
+        {
+            var request = _todoManager.TGetList();
+            return View(request);
         }
 
         public IActionResult DeleteTodo(int id)
