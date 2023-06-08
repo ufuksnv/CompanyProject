@@ -42,5 +42,11 @@ namespace BusinessLayer.Concrete
         {
             _toDoDal.Update(t);
         }
+
+        public List<ToDo> GetTodoListByMember(string id)
+        {
+
+            return _toDoDal.GetAll(x => x.AppUserId == id);
+        }
     }
 }

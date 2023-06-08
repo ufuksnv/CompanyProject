@@ -12,6 +12,7 @@ namespace EntityLayer.Concrete
         public int Salary { get; set; }
         public DateTime? BirthDay { get; set; }
         public bool UserStatus { get; set; }
+        public int? ConfirmCode { get; set; } 
 
 
         public Department? Department { get; set; }

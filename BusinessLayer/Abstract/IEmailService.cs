@@ -9,5 +9,7 @@ namespace BusinessLayer.Abstract
     public interface IEmailService
     {
         Task SendResetPasswordEmail(string resetPasswordEmailLink, string ToEmail);
+
+        public Task SendConfirmCodeEmail(int ConfirmCode, string ToEmail);
     }
 }

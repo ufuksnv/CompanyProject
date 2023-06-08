@@ -1,10 +1,8 @@
 ﻿@using EntityLayer.Concrete
-@model List<Advice>
+@model List<ToDo>
 @{
-    ViewData["Title"] = "AdviceList";
+    ViewData["Title"] = "TodoListByMember";
 }
-
-<!DOCTYPE html>
 
 <html>
 <head>
@@ -20,18 +18,19 @@
                 <th>Id</th>
                 <th>Başlık</th>
                 <th>İçerik</th>
-                <th>Tarih</th>
+                <th>Oluşturma Tarihi</th>
+                <th>Hedef Tarihi</th>
                 <th>Sil</th>
             </tr>
-            
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@item.AdviceId</td>
+                    <td>@item.ToDoId</td>
                     <td>@item.Title</td>
                     <td>@item.Text</td>
-                    <td>@item.AdviceDate</td>
-                    <td><a asp-controller="Admin" asp-action="DeleteAdvice" asp-route-id="@item.AdviceId" class="btn btn-outline-warning">Sil</a></td>
+                    <td>@item.TodoAddDate</td>
+                    <td>@item.TargetDate</td>
+                    <td><a href="/Member/DeleteTodo/@item.ToDoId" class="btn btn-warning">Sil</a></td>
                 </tr>
             }
         </table>

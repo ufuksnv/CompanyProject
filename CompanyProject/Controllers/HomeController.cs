@@ -41,19 +41,29 @@ namespace CompanyProject.Controllers
         {
             if (ModelState.IsValid)
             {
+                Random random = new Random();
+                int randomKey = random.Next(100000, 1000000);
+
+
                 AppUser user = new AppUser()
                 {
                     UserName = request.UserName,
                     PhoneNumber = request.Phone,
-                    Email = request.Email
+                    Email = request.Email,
+                    ConfirmCode = randomKey
                 };
 
                 var identityResult = await _userManager.CreateAsync(user, request.Password);
 
                 if (identityResult.Succeeded)
                 {
-                    TempData["SuccessMessage"] = "Üyelik kayıt işlemi başarıyla gerçekleşmiştir";
-                    return RedirectToAction(nameof(HomeController.SignUp));
+
+                    await _emailService.SendConfirmCodeEmail(randomKey, request.Email!);
+                    //TempData["SuccessMessage"] = "Üyelik kayıt işlemi başarıyla gerçekleşmiştir";
+                    TempData["Mail"] = request.Email;
+
+                    //return RedirectToAction(nameof(HomeController.SignUp));
+                    return RedirectToAction(nameof(HomeController.CodeConfirm));
                 }
 
                 foreach (IdentityError item in identityResult.Errors)
@@ -63,6 +73,28 @@ namespace CompanyProject.Controllers
 
             }
             return View(request);
+        }
+
+        [HttpGet]
+        public IActionResult CodeConfirm()
+        {
+            var value = TempData["Mail"];
+            ViewBag.v = value;
+            
+            return View();           
+        }
+
+        [HttpPost]
+        public async Task <IActionResult> CodeConfirm(ConfirmMailViewModel confirmMailViewModel)
+        {
+            var user = await _userManager.FindByEmailAsync(confirmMailViewModel.Mail);
+            if (user.ConfirmCode == confirmMailViewModel.ConfirmCode)
+            {
+                user.EmailConfirmed = true;
+                await _userManager.UpdateAsync(user);
+                return RedirectToAction(nameof(HomeController.SignIn));
+            }
+            return View();
         }
 
         [HttpGet]
@@ -76,10 +108,16 @@ namespace CompanyProject.Controllers
         {
 
             var hasUser = await _userManager.FindByEmailAsync(request.Email);
-
+            
             if (hasUser == null)
             {
                 TempData["ErrorMessage"] = "Kullanıcı adınız veya parolanız hatalı lütfen tekrar deneyiniz.";
+                return View();
+            }
+
+            if (hasUser.EmailConfirmed == false)
+            {
+                TempData["ConfirmMessage"] = "Lütfen hesabınızı onaylayınız.";
                 return View();
             }
 
@@ -87,7 +125,8 @@ namespace CompanyProject.Controllers
 
             if (SignInresult.Succeeded)
             {
-                return RedirectToAction("Index", "Member");
+                //return RedirectToAction("Index", "Member");
+                return RedirectToAction(nameof(MemberController.Index));
             }
             if (SignInresult.IsLockedOut)
             {
